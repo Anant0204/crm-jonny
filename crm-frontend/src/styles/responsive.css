@@ -1,0 +1,1692 @@
+/* Responsive Breakpoint Rules & Utilities */
+
+html, body, #root, .app-layout, .main-content {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+  width: 100%;
+}
+
+/* Default / Mobile Mobile First (< 768px) */
+.visible-mobile { display: flex !important; }
+.hidden-mobile { display: none !important; }
+
+/* Page Header Action Buttons Right Alignment Global Rules */
+.page-header-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex-wrap: wrap !important;
+}
+
+.header-actions-right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.5rem !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .page-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .header-actions-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    margin-left: 0 !important;
+    gap: 0.5rem !important;
+  }
+
+  .header-actions-right button {
+    font-size: 11px !important;
+    padding: 0.35rem 0.65rem !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Grid Responsive Breakpoints — Responsive Grid Layout */
+.grid-responsive-kpi {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  align-items: stretch !important;
+}
+
+.grid-responsive-kpi > * {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.grid-responsive-kpi .kpi-card,
+.grid-responsive-kpi > * > .kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  min-height: 136px !important;
+  flex: 1 1 100% !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 440px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .grid-responsive-kpi .kpi-card,
+  .grid-responsive-kpi > * > .kpi-card {
+    padding: 0.75rem 0.75rem !important;
+    min-height: 136px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  .grid-responsive-kpi .kpi-card,
+  .grid-responsive-kpi > * > .kpi-card {
+    min-height: 124px !important;
+  }
+}
+
+/* 4-in-a-row compact KPI Strip */
+.kpi-strip-4col {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+@media (max-width: 860px) {
+  .kpi-strip-4col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-strip-4col {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* 2x2 Form Fields Grid (2 fields per line, 2 lines total) */
+.form-grid-2x2 {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem 1.25rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .form-grid-2x2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+}
+
+/* 2-Panel Chat Layout */
+.chat-master-grid {
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) !important;
+  gap: 0 !important;
+  height: calc(100vh - 190px) !important;
+  min-height: 540px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.chat-messages-stream {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.chat-back-btn {
+  display: none !important;
+}
+
+.chat-mobile-toggle-bar {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  .chat-master-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: auto !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  .chat-messages-stream {
+    max-height: 48vh !important;
+    min-height: 240px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 0.85rem 1rem !important;
+  }
+  .chat-back-btn {
+    display: inline-flex !important;
+  }
+  .chat-mobile-toggle-bar {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .chat-panel-left {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    border-right: none !important;
+    display: flex !important;
+  }
+  .chat-panel-left.mobile-hide {
+    display: none !important;
+  }
+  .chat-panel-right {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+  }
+  .chat-panel-right.mobile-hide {
+    display: none !important;
+  }
+}
+
+@media (min-width: 861px) {
+  .chat-mobile-toggle-bar {
+    display: none !important;
+  }
+  .chat-panel-left {
+    display: flex !important;
+  }
+  .chat-panel-right {
+    display: flex !important;
+  }
+}
+
+.grid-responsive-health {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 440px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-health {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+}
+
+.health-col-bordered {
+  border-left: none;
+  padding-left: 0;
+}
+
+@media (min-width: 1024px) {
+  .health-col-bordered {
+    border-left: 1px solid var(--border);
+    padding-left: 1rem;
+  }
+}
+
+/* Dashboard Executive Controls Layout */
+.dashboard-actions-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.625rem;
+}
+
+.dashboard-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 960px) {
+  .dashboard-actions-grid {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-actions-grid {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.625rem;
+  }
+  
+  .dashboard-timeframe-switcher {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .dashboard-timeframe-switcher button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .dashboard-btn-group {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-btn-group > * {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-btn-group button {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 11px !important;
+    padding: 0.35rem 0.5rem !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Card and Grid Items Containment */
+.grid-responsive-2col > *,
+.grid-responsive-kpi > *,
+.grid-responsive-6kpi > *,
+.surface-card,
+.kpi-card {
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.grid-responsive-6kpi {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+.grid-responsive-2col {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dashboard Task, Activity, Stage, and Channel Items Mobile Responsiveness */
+.dashboard-task-item {
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-activity-item {
+  padding: 10px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-stage-item {
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-channel-item {
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+  .dashboard-task-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-activity-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-stage-item {
+    padding: 10px 10px !important;
+  }
+  .dashboard-channel-item {
+    padding: 10px 10px !important;
+  }
+}
+
+/* ERP Sub-Modules Grid Responsiveness (4 per line on Desktop, 2 on Tablet, 1 on Mobile) */
+.erp-submodules-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.875rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 960px) {
+  .erp-submodules-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .erp-submodules-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* AI Toolset Suite Grid Responsiveness (4 per line on Desktop, 2 on Tablet, 1 on Mobile) */
+.ai-tools-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 1024px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .ai-tools-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Support Sub-Modules Grid Responsiveness (2 per line on Desktop & Tablet, 1 on Mobile) */
+.support-submodules-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .support-submodules-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile Login Gateway Responsiveness */
+.login-role-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.login-role-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.login-role-card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .login-grid-wrapper {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .login-left-card, .login-right-card {
+    grid-column: span 12 / span 12 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-top-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  .login-switch-btn {
+    width: 100% !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+
+  .login-preset-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .login-role-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    padding: 0.875rem !important;
+  }
+
+  .login-role-card-left {
+    width: 100% !important;
+  }
+
+  .login-role-card-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .login-role-card-pass {
+    font-size: 10px !important;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-left-card, .login-right-card {
+    padding: 1rem !important;
+  }
+}
+
+/* 320px - 430px (Small to Large Mobile Devices) */
+@media (max-width: 430px) {
+  :root {
+    --text-3xl: 1.5rem;
+    --text-2xl: 1.25rem;
+  }
+  
+  .px-mobile-sm {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* 768px (Tablet Portrait & Large Mobile) */
+@media (min-width: 768px) {
+  .visible-mobile { display: none !important; }
+  .hidden-mobile { display: flex !important; }
+  .hidden-mobile.flex-col { flex-direction: column !important; }
+  
+  .grid-responsive-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Table Toolbar Single-Row Responsive Layout */
+.table-toolbar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  padding: 0.875rem !important;
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.table-toolbar-search {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.table-toolbar-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.table-toolbar-actions .form-group {
+  flex: 1 1 140px !important;
+  min-width: 130px !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.table-toolbar-actions > * {
+  flex: 1 1 auto !important;
+  min-width: 120px !important;
+}
+
+@media (min-width: 768px) {
+  .table-toolbar {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .table-toolbar-search {
+    max-width: 320px !important;
+    width: 320px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .table-toolbar-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 0.625rem !important;
+    width: auto !important;
+    flex: 1 !important;
+  }
+
+  .table-toolbar-actions .form-group {
+    width: auto !important;
+    min-width: 155px !important;
+    flex: initial !important;
+    margin: 0 !important;
+  }
+
+  .table-toolbar-actions > * {
+    flex: initial !important;
+    min-width: auto !important;
+  }
+}
+
+/* 1024px (Tablet Landscape / Laptop) */
+@media (min-width: 1024px) {
+  .grid-responsive-kpi {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+  .grid-responsive-health {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* 1400px+ (Ultra Wide Enterprise Screens) */
+@media (min-width: 1400px) {
+  .grid-responsive-6kpi {
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+  .container-wide {
+    max-width: 1400px;
+  }
+}
+
+/* Mobile KPI Card Compact Sizing */
+@media (max-width: 640px) {
+  .kpi-card {
+    padding: 0.75rem 0.65rem !important;
+    height: auto !important;
+    min-height: 105px !important;
+    border-radius: 12px !important;
+    gap: 0.35rem !important;
+  }
+  
+  .kpi-card [style*="font-size: 1.75rem"],
+  .kpi-card .text-2xl {
+    font-size: 1.25rem !important;
+  }
+
+  .kpi-card [style*="text-transform: uppercase"] {
+    font-size: 9.5px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .kpi-card [style*="width: 34px"] {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .kpi-card [style*="width: 34px"] svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+/* Responsive 3-Column Grid */
+.grid-responsive-3col {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-3col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Profile Header Strip */
+.profile-header-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 640px) {
+  .profile-header-strip {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.profile-avatar-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* 6-Card Balanced Grid (2-Col Mobile -> 3-Col Desktop -> 6-Col Ultra Wide) */
+.grid-kpi-6balanced {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 860px) {
+  .grid-kpi-6balanced {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* HR Employee Detail Fields Grid (2-Col on Desktop and Mobile) */
+.grid-employee-fields {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1.25rem 2rem !important;
+  width: 100% !important;
+}
+
+@media (max-width: 640px) {
+  .grid-employee-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.15rem 0.75rem !important;
+  }
+}
+
+/* Kanban Board Responsive Column Alignment */
+.kanban-column {
+  width: 285px;
+  min-width: 285px;
+  max-width: 285px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+@media (max-width: 640px) {
+  .kanban-board-scroll {
+    scroll-snap-type: x mandatory;
+    gap: 0.75rem !important;
+  }
+  
+  .kanban-column {
+    width: calc(100vw - 2.5rem) !important;
+    min-width: calc(100vw - 2.5rem) !important;
+    max-width: calc(100vw - 2.5rem) !important;
+    scroll-snap-align: center;
+  }
+}
+
+/* 5-Card Balanced Lender Grid */
+.grid-lender-kpi-5 {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  align-items: stretch !important;
+}
+
+.grid-lender-kpi-5 > * {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.grid-lender-kpi-5 .kpi-card,
+.grid-lender-kpi-5 > * > .kpi-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
+  min-height: 128px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 1200px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-lender-kpi-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem !important;
+  }
+
+  .grid-lender-kpi-5 > *:last-child {
+    grid-column: span 2 !important;
+  }
+
+  .grid-lender-kpi-5 .kpi-card,
+  .grid-lender-kpi-5 > * > .kpi-card {
+    padding: 0.75rem 0.75rem !important;
+    min-height: 120px !important;
+  }
+}
+
+.kpi-compact {
+  min-height: 128px !important;
+  height: 100% !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.kpi-compact [style*="font-size: 1.75rem"] {
+  font-size: 1.35rem !important;
+}
+
+/* Master Platform Administration Modules Grid */
+.grid-admin-modules-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .grid-admin-modules-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 580px) {
+  .grid-admin-modules-4 {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+.admin-module-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  background-color: var(--surface-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.admin-module-card:hover {
+  border-color: var(--accent);
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* ====================================================
+   COMPREHENSIVE FULL-PLATFORM RESPONSIVE ENHANCEMENTS
+   ==================================================== */
+
+/* Universal Fluid Containment & Anti-Overflow Rules */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, canvas, iframe, svg {
+  max-width: 100%;
+}
+
+pre, code {
+  max-width: 100%;
+  overflow-x: auto;
+  word-break: break-word;
+}
+
+/* Topbar Header Responsive Behavior */
+@media (max-width: 640px) {
+  header[style*="var(--topbar-height)"] {
+    padding: 0 0.75rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  header[style*="var(--topbar-height)"] {
+    padding: 0 0.5rem !important;
+  }
+}
+
+/* Main Content Mobile Bottom Safe Padding */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0.75rem !important;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .main-content {
+    padding: 0.5rem !important;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ====================================================
+   1. UNIFIED LOGIN PORTAL GATEWAY RESPONSIVENESS
+   ==================================================== */
+@media (max-width: 992px) {
+  .unified-login-root {
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    padding: 1.25rem 0.85rem !important;
+    overflow-y: auto !important;
+  }
+
+  .portal-login-main-container {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .portal-left-panel,
+  .portal-right-panel {
+    grid-column: span 12 / span 12 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-right: none !important;
+  }
+
+  .portal-left-panel {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15) !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+
+  .portal-right-panel {
+    padding: 1.5rem 1.25rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .unified-login-root {
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  .portal-left-panel {
+    padding: 1.15rem 0.85rem !important;
+  }
+
+  .portal-right-panel {
+    padding: 1.15rem 0.85rem !important;
+  }
+
+  .portal-roles-grid {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+
+  .portal-role-card {
+    padding: 0.55rem 0.75rem !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .portal-left-panel {
+    padding: 1rem 0.65rem !important;
+  }
+
+  .portal-right-panel {
+    padding: 1rem 0.65rem !important;
+  }
+
+  .portal-role-card {
+    padding: 0.45rem 0.6rem !important;
+  }
+}
+
+/* ====================================================
+   2. AI CONTENT STUDIO & PRODUCTION LABS RESPONSIVENESS
+   ==================================================== */
+/* Workstation & Studio Canvas Split Grid */
+@media (max-width: 960px) {
+  div[style*="minmax(380px"],
+  div[style*="minmax(360px"],
+  div[style*="minmax(320px"] {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+}
+
+/* 3D Studio Cards Grid */
+@media (max-width: 1024px) {
+  div[style*="minmax(215px, 1fr)"] {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  div[style*="minmax(215px, 1fr)"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .card-3d-stage {
+    perspective: none !important;
+    padding: 2px !important;
+  }
+
+  .card-3d-main {
+    transform: none !important;
+    padding: 10px 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .card-3d-underlay {
+    display: none !important;
+  }
+
+  .card-3d-container:hover .card-3d-main {
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0, 103, 66, 0.15) !important;
+  }
+
+  /* Vibrant Pic 1 KPI Cards */
+  .pic1-kpi-card {
+    padding: 14px 16px !important;
+    min-height: 110px !important;
+    border-radius: 14px !important;
+  }
+
+  .pic1-kpi-card [style*="font-size: 28px"] {
+    font-size: 20px !important;
+  }
+
+  /* Studio Workspace Controls Collapse */
+  div[style*="gridTemplateColumns: '1fr 1fr'"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  div[style*="minmax(215px, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ====================================================
+   3. SECURED EBOX RESTRICTED VAULT RESPONSIVENESS
+   ==================================================== */
+@media (max-width: 900px) {
+  .ebox-main-grid {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .ebox-main-grid > div:first-child {
+    height: auto !important;
+    max-height: 250px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .ebox-main-grid > div:last-child {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Persona Controller Bar Stack */
+  div[style*="linear-gradient"][style*="Active Operator Identity"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+
+  div[style*="linear-gradient"] .flex.items-center.gap-1\.5 {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  div[style*="linear-gradient"] .flex.items-center.gap-1\.5 button {
+    flex: 1 !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* ====================================================
+   4. BESTIE AI & CHAT INTERFACE RESPONSIVENESS
+   ==================================================== */
+@media (max-width: 768px) {
+  div[style*="height: 'calc(100vh - var(--topbar-height) - 3rem)'"],
+  div[style*="height: calc(100vh - var(--topbar-height) - 3rem)"] {
+    height: calc(100vh - var(--topbar-height) - 95px) !important;
+    max-height: calc(100vh - var(--topbar-height) - 95px) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Bestie Quick Prompts horizontal swipe */
+  div[style*="display: 'flex'"][style*="overflowX: 'auto'"] {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Bubble max width */
+  div[style*="maxWidth: '740px'"],
+  div[style*="max-width: 740px"] {
+    max-width: 90% !important;
+    padding: 0.85rem 1rem !important;
+  }
+
+  /* Input action bar inside Bestie chat */
+  div[style*="padding: '0.875rem 1.15rem'"] {
+    padding: 0.65rem 0.75rem !important;
+  }
+}
+
+/* ====================================================
+   5. DATA TABLES, TOOLBARS & PAGINATION RESPONSIVENESS
+   ==================================================== */
+.table-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
+}
+
+.table-container table,
+.table {
+  min-width: 560px;
+}
+
+@media (max-width: 640px) {
+  .table-container table,
+  .table {
+    min-width: 500px;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 12px !important;
+  }
+
+  /* Pagination Mobile Centered Stack */
+  .pagination {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.65rem !important;
+    text-align: center !important;
+    padding: 0.75rem !important;
+  }
+
+  .pagination > div {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ====================================================
+   6. MODAL & DIALOG VIEWPORT CONSTRAINTS
+   ==================================================== */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0.5rem !important;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 94vh !important;
+    border-radius: 14px !important;
+    margin: 0 !important;
+  }
+
+  .modal-header {
+    padding: 1rem 1.15rem !important;
+  }
+
+  .modal-body {
+    padding: 1rem 1.15rem !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .modal-footer {
+    padding: 0.75rem 1.15rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Modal form grids collapse to 1 column */
+  .modal-body .grid-cols-2,
+  .modal-body div[style*="gridTemplateColumns: 'repeat(2"],
+  .modal-body div[style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* ====================================================
+   7. GENERAL UTILITY GRID SAFETY COLLAPSE (< 640px)
+   ==================================================== */
+@media (max-width: 640px) {
+  .grid-cols-2:not(.preserve-grid):not(.grid-responsive-kpi):not(.grid-kpi-6balanced),
+  .grid-cols-3:not(.preserve-grid),
+  .grid-cols-4:not(.preserve-grid) {
+    grid-template-columns: 1fr !important;
+  }
+
+  .col-span-12, .col-span-11, .col-span-10, .col-span-9,
+  .col-span-8, .col-span-7, .col-span-6, .col-span-5,
+  .col-span-4, .col-span-3, .col-span-2 {
+    grid-column: span 1 / span 1 !important;
+  }
+}
+
+/* ====================================================
+   8. TASK CALENDAR MOBILE ERGONOMICS (< 480px)
+   ==================================================== */
+@media (max-width: 480px) {
+  div[style*="minHeight: '46px'"],
+  div[style*="min-height: 46px"] {
+    min-height: 36px !important;
+    padding: 2px !important;
+  }
+}
+
+/* ====================================================
+   9. COMPREHENSIVE GLOBAL RESPONSIVE GUARDS (< 768px)
+   ==================================================== */
+
+/* Global container and layout isolation */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0.75rem 0.625rem !important;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-content > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Header rows stack cleanly on mobile */
+  .page-header-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+
+  .header-actions-right {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    margin-left: 0 !important;
+  }
+
+  .header-actions-right > button,
+  .header-actions-right > .btn {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+    min-height: 38px !important;
+  }
+
+  /* Universal table horizontal swipe isolation */
+  .table-container,
+  .table-responsive,
+  div:has(> table) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+  }
+
+  /* Card padding and borders on mobile */
+  .surface-card,
+  .card,
+  div[style*="borderRadius: '16px'"],
+  div[style*="border-radius: 16px"] {
+    border-radius: 12px !important;
+  }
+
+  /* Buttons & interactive touch ergonomics */
+  button, select, input, textarea {
+    touch-action: manipulation;
+  }
+
+  /* Tabs horizontal scrolling with touch bounce */
+  .tabs-nav,
+  div[role="tablist"],
+  div[style*="overflowX: 'auto'"],
+  div[style*="overflow-x: auto"] {
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  div[role="tablist"]::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* Extra small mobile screens (< 380px) */
+@media (max-width: 380px) {
+  .main-content {
+    padding: 0.5rem 0.375rem !important;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .grid-responsive-kpi {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .grid-responsive-kpi .kpi-card,
+  .grid-responsive-kpi > * > .kpi-card {
+    min-height: 110px !important;
+    padding: 0.65rem !important;
+  }
+}
+
+/* ====================================================
+   10. UNIVERSAL CROSS-DEVICE RESPONSIVE SHIELD
+   Ensures entire software is proper responsive across
+   Mobile (<640px), Tablets (641px-1024px), & Desktop
+   ==================================================== */
+
+/* --- A. Tablet (641px to 1024px) Layout Ergonomics --- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* 4-col grids become 2-col on tablets to avoid cramped cards */
+  .grid-cols-4:not(.preserve-grid),
+  div[style*="repeat(4,"]:not(.preserve-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* 3-col grids become 2-col on tablets */
+  .grid-cols-3:not(.preserve-grid),
+  div[style*="repeat(3,"]:not(.preserve-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* Split side-by-side grids that are too narrow on portrait tablet */
+  .grid-responsive-2col {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  /* Topbar Search max width on tablet */
+  .search-input-wrapper,
+  button[title="Search"] {
+    max-width: 260px !important;
+  }
+}
+
+/* --- B. Universal Table Protection Across All Viewports (< 960px) --- */
+@media (max-width: 960px) {
+  /* Ensure any container holding a table provides smooth swipe */
+  div:has(> table),
+  .table-container,
+  .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    display: block !important;
+  }
+
+  table,
+  .table {
+    min-width: 620px !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  table th,
+  table td,
+  .table th,
+  .table td {
+    white-space: nowrap !important;
+  }
+
+  /* Allow description/title columns to wrap with max-width */
+  table td:nth-child(2),
+  table td:nth-child(3) {
+    white-space: normal !important;
+    min-width: 150px !important;
+  }
+}
+
+/* --- C. Mobile & Phablet Universal Form & Modal Safety (< 640px) --- */
+@media (max-width: 640px) {
+  /* All multi-column form grids collapse to 1 column */
+  .form-row,
+  .form-grid,
+  .modal-body .grid,
+  .modal-body div[style*="gridTemplateColumns"],
+  .modal-body div[style*="grid-template-columns"],
+  div[style*="gridTemplateColumns: 'repeat(2"],
+  div[style*="grid-template-columns: repeat(2"],
+  div[style*="gridTemplateColumns: 'repeat(3"],
+  div[style*="grid-template-columns: repeat(3"],
+  div[style*="gridTemplateColumns: '1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Modal Dialog Viewport Constraints */
+  .modal-overlay,
+  div[role="dialog"] {
+    padding: 8px !important;
+    align-items: center !important;
+  }
+
+  .modal-content,
+  div[role="dialog"] > div {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: calc(100vh - 32px) !important;
+    margin: 8px auto !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .modal-body {
+    max-height: calc(100vh - 170px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 1rem 0.85rem !important;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse !important;
+    gap: 0.5rem !important;
+    padding: 0.75rem 0.85rem !important;
+  }
+
+  .modal-footer button,
+  .modal-footer .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 40px !important;
+  }
+
+  /* Universal Horizontal Tabs & Filter Chips Swipe */
+  .tabs-header,
+  .tabs-list,
+  .tabs-nav,
+  .tab-group,
+  .tab-strip,
+  .filter-pills,
+  div[role="tablist"],
+  div[style*="role='tablist'"] {
+    display: flex !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 0.5rem !important;
+    padding-bottom: 4px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .tabs-header::-webkit-scrollbar,
+  .tabs-list::-webkit-scrollbar,
+  .tabs-nav::-webkit-scrollbar,
+  div[role="tablist"]::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .tabs-header button,
+  .tabs-list button,
+  .tabs-nav button,
+  div[role="tablist"] button {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+
+  /* Buttons in action rows */
+  .dashboard-btn-group,
+  .actions-group,
+  .filter-bar {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+
+  .dashboard-btn-group > button,
+  .dashboard-btn-group > .btn,
+  .actions-group > button {
+    flex: 1 1 auto !important;
+    min-width: 110px !important;
+    justify-content: center !important;
+    font-size: 11.5px !important;
+  }
+
+  /* Charts and Telemetry containers */
+  .recharts-responsive-container,
+  .recharts-wrapper,
+  svg.recharts-surface {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Global cards spacing on mobile */
+  .card,
+  .surface-card {
+    padding: 0.85rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Breadcrumb wrapping */
+  .breadcrumb,
+  nav[aria-label="Breadcrumb"] {
+    flex-wrap: wrap !important;
+    font-size: 11px !important;
+  }
+}
+
+/* --- D. Ultra-Small Screens (< 360px) Safety --- */
+@media (max-width: 360px) {
+  .grid-responsive-kpi {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .kpi-card {
+    min-height: 98px !important;
+    padding: 0.65rem 0.55rem !important;
+  }
+
+  .main-content {
+    padding: 0.35rem 0.25rem !important;
+  }
+}
+
+
+

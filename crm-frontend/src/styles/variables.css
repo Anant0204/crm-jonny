@@ -1,0 +1,219 @@
+/* Design System Tokens — CRM nErgy + OAL Network (Next-Gen Distinctive Enterprise Edition) */
+
+:root {
+  /* Font Families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  /* Radii - Modern Sculpted Curves */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout Dimensions */
+  --sidebar-width: 236px;
+  --sidebar-collapsed-width: 74px;
+  --topbar-height: 66px;
+
+  /* Z-indices */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-drawer: 1040;
+  --z-modal-backdrop: 1050;
+  --z-modal: 1060;
+  --z-toast: 1070;
+  --z-tooltip: 1080;
+
+  /* Distinctive Energy Brand Accents & Gradient Tokens */
+  --energy-orange: #f97316;
+  --energy-orange-hover: #ea580c;
+  --energy-orange-light: rgba(249, 115, 22, 0.12);
+  --energy-cyan: #06b6d4;
+  --energy-cyan-light: rgba(6, 182, 212, 0.12);
+  --energy-sky: #38bdf8;
+  --energy-sky-hover: #0284c7;
+  --energy-indigo: #6366f1;
+  --energy-indigo-light: rgba(99, 102, 241, 0.12);
+  --energy-violet: #8b5cf6;
+  --energy-emerald: #10b981;
+  --energy-emerald-light: rgba(16, 185, 129, 0.12);
+  --energy-amber: #f59e0b;
+  --energy-rose: #f43f5e;
+
+  /* Signature Luminous Gradients */
+  --gradient-energy: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%);
+  --gradient-cyan: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  --gradient-indigo: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-amber: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-dark-deck: linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.95) 100%);
+
+  /* Navigation Token Overrides */
+  --nav-hover-bg: rgba(99, 102, 241, 0.08);
+  --nav-hover-text: #4f46e5;
+  --icon-hover-color: #6366f1;
+}
+
+/* Light Theme Variables — Crisp Modern Fintech / Enterprise Aesthetic */
+:root, [data-theme="light"] {
+  --primary: #0f2b5c;
+  --primary-hover: #1e40af;
+  --primary-light: #eff6ff;
+  --primary-border: #bfdbfe;
+  
+  --secondary: #475569;
+  --secondary-hover: #334155;
+  
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-light: #f0fdfa;
+
+  --background: #f5f7fb;
+  --bg-radial-mesh: radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.035) 0px, transparent 50%),
+                    radial-gradient(at 90% 15%, rgba(6, 182, 212, 0.04) 0px, transparent 45%),
+                    radial-gradient(at 50% 90%, rgba(249, 115, 22, 0.025) 0px, transparent 50%);
+  
+  --surface: #ffffff;
+  --surface-secondary: #f0f4fa;
+  --surface-hover: #e6edf8;
+  --surface-elevated: #ffffff;
+  
+  --glass-surface: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(226, 232, 240, 0.8);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-subtle: #f1f5f9;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-on-primary: #ffffff;
+
+  --success: #16a34a;
+  --success-light: #f0fdf4;
+  --success-border: #bbf7d0;
+  
+  --warning: #d97706;
+  --warning-light: #fffbeb;
+  --warning-border: #fde68a;
+  
+  --error: #dc2626;
+  --error-light: #fef2f2;
+  --error-border: #fecaca;
+  
+  --info: #0284c7;
+  --info-light: #f0f9ff;
+  --info-border: #bae6fd;
+
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 12px 20px -4px rgba(15, 23, 42, 0.07), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0 24px 32px -8px rgba(15, 23, 42, 0.09), 0 8px 12px -4px rgba(15, 23, 42, 0.04);
+  
+  /* Distinctive Card Elevation */
+  --shadow-card: 0 2px 6px -1px rgba(15, 23, 42, 0.04), 0 10px 24px -4px rgba(15, 23, 42, 0.05);
+  --shadow-card-hover: 0 6px 16px -2px rgba(15, 23, 42, 0.06), 0 18px 36px -6px rgba(15, 23, 42, 0.09);
+  --shadow-glow: 0 0 25px -5px rgba(99, 102, 241, 0.18);
+
+  --scroll-thumb: #cbd5e1;
+  --scroll-track: #f1f5f9;
+
+  /* Executive Command Deck Gradient */
+  --deck-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 244, 252, 0.9) 100%);
+  --deck-border: rgba(99, 102, 241, 0.2);
+}
+
+/* Dark Theme Variables — Deep Cosmic Obsidian & Electric Neon Accents */
+[data-theme="dark"] {
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-light: rgba(99, 102, 241, 0.16);
+  --primary-border: #4338ca;
+  
+  --secondary: #94a3b8;
+  --secondary-hover: #cbd5e1;
+  
+  --accent: #14b8a6;
+  --accent-hover: #2dd4bf;
+  --accent-light: rgba(20, 184, 166, 0.15);
+
+  --background: #090d16;
+  --bg-radial-mesh: radial-gradient(at 15% 10%, rgba(99, 102, 241, 0.09) 0px, transparent 55%),
+                    radial-gradient(at 85% 15%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 50% 90%, rgba(249, 115, 22, 0.06) 0px, transparent 55%);
+
+  --surface: #0f1523;
+  --surface-secondary: #161e31;
+  --surface-hover: #1e2840;
+  --surface-elevated: #141c2e;
+  
+  --glass-surface: rgba(15, 21, 35, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.05);
+
+  --border: #1e293b;
+  --border-strong: #334155;
+  --border-subtle: #141b2b;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-on-primary: #ffffff;
+
+  --success: #22c55e;
+  --success-light: rgba(34, 197, 94, 0.15);
+  --success-border: #14532d;
+  
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.15);
+  --warning-border: #78350f;
+  
+  --error: #ef4444;
+  --error-light: rgba(239, 68, 68, 0.15);
+  --error-border: #7f1d1d;
+  
+  --info: #38bdf8;
+  --info-light: rgba(56, 189, 248, 0.15);
+  --info-border: #075985;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 20px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 24px 32px -5px rgba(0, 0, 0, 0.7), 0 8px 12px -6px rgba(0, 0, 0, 0.5);
+
+  /* Distinctive Card Elevation */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.45), 0 12px 28px -4px rgba(0, 0, 0, 0.55);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.55), 0 20px 42px -4px rgba(0, 0, 0, 0.75);
+  --shadow-glow: 0 0 30px -4px rgba(99, 102, 241, 0.35);
+
+  --scroll-thumb: #334155;
+  --scroll-track: #0f1523;
+
+  /* Executive Command Deck Gradient */
+  --deck-bg: linear-gradient(135deg, rgba(22, 30, 49, 0.95) 0%, rgba(15, 21, 35, 0.95) 100%);
+  --deck-border: rgba(99, 102, 241, 0.35);
+}
