@@ -62,6 +62,16 @@ const SSOLoginPage = () => {
             navigate(targetUrl, { replace: true })
           }, 150)
         } else {
+          // If the ticket was already consumed (replay) or expired,
+          // but the user already has a valid session token in Worksuite, proceed smoothly
+          const existingToken = localStorage.getItem('token') || localStorage.getItem('authToken')
+          if (existingToken) {
+            setIsSuccess(true)
+            setStatus('Active session verified. Launching workspace...')
+            navigate(targetUrl, { replace: true })
+            return
+          }
+
           setErrorMsg(res?.error || 'Authentication handshake could not be completed.')
           setStatus('Authentication error')
         }

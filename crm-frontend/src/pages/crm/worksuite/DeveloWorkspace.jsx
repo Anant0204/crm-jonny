@@ -70,6 +70,7 @@ export const DeveloWorkspace = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [ticket, setTicket] = useState(null);
   const [ticketError, setTicketError] = useState(null);
+  const [hasAuthedSession, setHasAuthedSession] = useState(false);
 
   // Derive active module robustly from location pathname or params
   const currentModule = useMemo(() => {
@@ -116,12 +117,17 @@ export const DeveloWorkspace = () => {
     };
   }, [iframeKey]);
 
-  // Construct SSO authentication target URL with the signed ticket
+  // Construct iframe URL:
+  // - Initial handshake uses /sso-login with the single-use cryptographic ticket
+  // - Subsequent sidebar sub-navigation loads the target module directly without reusing spent tickets
   const iframeSrc = useMemo(() => {
-    if (!ticket) return '';
     const activeTheme = isDark ? 'dark' : 'light';
-    return `http://localhost:5174/sso-login?ticket=${encodeURIComponent(ticket)}&embedded=true&theme=${activeTheme}&redirect=${encodeURIComponent(targetSubpath)}`;
-  }, [ticket, targetSubpath, isDark]);
+    if (!hasAuthedSession) {
+      if (!ticket) return '';
+      return `http://localhost:5174/sso-login?ticket=${encodeURIComponent(ticket)}&embedded=true&theme=${activeTheme}&redirect=${encodeURIComponent(targetSubpath)}`;
+    }
+    return `http://localhost:5174${targetSubpath}?embedded=true&theme=${activeTheme}`;
+  }, [hasAuthedSession, ticket, targetSubpath, isDark]);
 
   // Format module title for header
   const titleFormatted = useMemo(() => {
@@ -167,6 +173,8 @@ export const DeveloWorkspace = () => {
 
   const handleReload = () => {
     setIsLoading(true);
+    setHasAuthedSession(false);
+    setTicket(null);
     setIframeKey((prev) => prev + 1);
   };
 
@@ -406,7 +414,7 @@ export const DeveloWorkspace = () => {
 
         {iframeSrc && !ticketError && (
           <iframe
-            key={`${iframeKey}-${targetSubpath}`}
+            key={iframeKey}
             src={iframeSrc}
             title={`Develo CRM - ${titleFormatted}`}
             style={{
@@ -415,7 +423,10 @@ export const DeveloWorkspace = () => {
               border: 'none',
               display: 'block',
             }}
-            onLoad={() => setIsLoading(false)}
+            onLoad={() => {
+              setIsLoading(false);
+              setHasAuthedSession(true);
+            }}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           />
         )}
