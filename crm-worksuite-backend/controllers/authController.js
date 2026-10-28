@@ -4,7 +4,20 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const pool = require('../config/db');
+
+// In-memory nonce cache for SSO replay protection (cleaned periodically)
+const usedTicketNonces = new Map();
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [jti, expiresAt] of usedTicketNonces.entries()) {
+    if (expiresAt < now) {
+      usedTicketNonces.delete(jti);
+    }
+  }
+}, 5 * 60 * 1000).unref();
 
 /**
  * Login user
@@ -555,24 +568,97 @@ const changePassword = async (req, res) => {
 };
 
 /**
- * Single Sign-On (SSO) login endpoint
+ * Cryptographically Verified Single Sign-On (SSO) login endpoint
  * POST /api/v1/auth/sso
+ * Requires: { ssoTicket: string } signed by CRM - Energy backend
  */
 const ssoLogin = async (req, res) => {
   try {
-    const { email, name, role } = req.body;
-    if (!email) {
-      return res.status(400).json({ success: false, error: 'Email is required for SSO' });
+    const { ssoTicket } = req.body;
+    if (!ssoTicket || typeof ssoTicket !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required cryptographically signed SSO exchange ticket.'
+      });
     }
 
-    let normalizedRole = 'ADMIN';
-    const upper = (role || '').toUpperCase();
-    if (upper.includes('SUPER')) normalizedRole = 'SUPERADMIN';
-    else if (upper.includes('CLIENT') || upper.includes('CUSTOMER')) normalizedRole = 'CLIENT';
-    else if (upper.includes('EMPLOYEE') || upper.includes('CREATOR') || upper.includes('CRM_PRO')) normalizedRole = 'EMPLOYEE';
-    else normalizedRole = 'ADMIN';
+    const ssoSecret = process.env.WORKSUITE_SSO_SECRET || 'worksuite_sso_secure_exchange_secret_2026_change_in_prod';
 
-    // Check if user already exists
+    // 1. Verify token signature, issuer, audience, and expiration
+    let payload;
+    try {
+      payload = jwt.verify(ssoTicket, ssoSecret, {
+        issuer: 'crm-nergy-backend',
+        audience: 'worksuite-crm',
+      });
+    } catch (verifyErr) {
+      console.warn('[SSO Security] Ticket verification failed:', verifyErr.message);
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid, malformed, or expired SSO authentication ticket.'
+      });
+    }
+
+    const { jti, email, name, role, exp } = payload;
+    if (!jti || !email) {
+      return res.status(400).json({
+        success: false,
+        error: 'Malformed ticket identity claims.'
+      });
+    }
+
+    // 2. Replay attack protection (Layer 1: Fast in-memory nonce cache)
+    if (usedTicketNonces.has(jti)) {
+      console.warn(`[SSO Security] Replay attack detected in-memory for ticket jti=${jti}`);
+      return res.status(403).json({
+        success: false,
+        error: 'This SSO authentication ticket has already been used. Replay rejected.'
+      });
+    }
+
+    // Replay attack protection (Layer 2: Distributed database table with unique constraint)
+    try {
+      await pool.execute(`
+        CREATE TABLE IF NOT EXISTS sso_used_nonces (
+          jti VARCHAR(64) PRIMARY KEY,
+          expires_at DATETIME NOT NULL,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+      `);
+
+      const expiresDate = new Date(exp ? exp * 1000 : Date.now() + 60000);
+      await pool.execute(
+        'INSERT INTO sso_used_nonces (jti, expires_at) VALUES (?, ?)',
+        [jti, expiresDate]
+      );
+
+      // Clean up expired nonces in background (older than 10 minutes)
+      pool.execute('DELETE FROM sso_used_nonces WHERE expires_at < DATE_SUB(NOW(), INTERVAL 10 MINUTE)').catch(() => {});
+    } catch (dbNonceErr) {
+      if (dbNonceErr.code === 'ER_DUP_ENTRY') {
+        console.warn(`[SSO Security] Distributed replay attack detected in DB for ticket jti=${jti}`);
+        return res.status(403).json({
+          success: false,
+          error: 'This SSO authentication ticket has already been used. Replay rejected.'
+        });
+      }
+    }
+
+    const expiryMs = (exp ? exp * 1000 : Date.now() + 60000) + 60000;
+    usedTicketNonces.set(jti, expiryMs);
+
+    // 3. Strict server-enforced role mapping (prevent privilege escalation)
+    let targetRole = 'ADMIN';
+    if (role === 'CLIENT') {
+      targetRole = 'CLIENT';
+    } else if (role === 'EMPLOYEE') {
+      targetRole = 'EMPLOYEE';
+    } else {
+      // Default authorized staff / executive mapping
+      targetRole = 'ADMIN';
+    }
+
+    // 4. Locate or securely provision user in crm_db
     const [existing] = await pool.execute(
       'SELECT id, company_id, name, email, role, status FROM users WHERE email = ? AND is_deleted = 0',
       [email]
@@ -581,27 +667,36 @@ const ssoLogin = async (req, res) => {
     let user;
     if (existing.length > 0) {
       user = existing[0];
+      // Keep name and authorized role synchronized
+      await pool.execute(
+        'UPDATE users SET name = ?, role = ?, updated_at = NOW() WHERE id = ?',
+        [name || user.name, targetRole, user.id]
+      );
+      user.role = targetRole;
     } else {
-      // Pick first company
-      const [companies] = await pool.execute('SELECT id, name FROM companies LIMIT 1');
+      // Secure Provisioning: NEVER use predictable default passwords like 'admin123'
+      const secureRandomPassword = crypto.randomBytes(32).toString('hex');
+      const securePasswordHash = await bcrypt.hash(secureRandomPassword, 10);
+      const [companies] = await pool.execute('SELECT id, name FROM companies WHERE is_deleted = 0 LIMIT 1');
       const companyId = companies.length > 0 ? companies[0].id : 1;
-      const defaultHash = await bcrypt.hash('admin123', 10);
+
       const [result] = await pool.execute(
         `INSERT INTO users (company_id, name, email, password, role, status, created_at, updated_at, is_deleted)
          VALUES (?, ?, ?, ?, ?, 'Active', NOW(), NOW(), 0)`,
-        [companyId, name || 'Business Owner', email, defaultHash, normalizedRole]
+        [companyId, name || 'CRM User', email, securePasswordHash, targetRole]
       );
+
       user = {
         id: result.insertId,
         company_id: companyId,
-        name: name || 'Business Owner',
+        name: name || 'CRM User',
         email,
-        role: normalizedRole,
+        role: targetRole,
         status: 'Active'
       };
     }
 
-    // Generate valid JWT token
+    // 5. Generate secure internal Worksuite session JWT
     const token = jwt.sign(
       {
         userId: user.id,
@@ -618,10 +713,10 @@ const ssoLogin = async (req, res) => {
       user
     });
   } catch (error) {
-    console.error('SSO error in authController:', error);
+    console.error('SSO handoff error in authController:', error);
     return res.status(500).json({
       success: false,
-      error: error.message || 'Internal SSO authentication failure'
+      error: 'An internal error occurred during secure SSO exchange.'
     });
   }
 };

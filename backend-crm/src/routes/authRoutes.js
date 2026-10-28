@@ -10,5 +10,6 @@ router.post('/login', authController.login);
 // Protected Auth Endpoints
 router.get('/me', authenticateToken, authController.getMe);
 router.post('/logout', authenticateToken, authController.logout);
+router.post('/worksuite-sso-token', authenticateToken, authController.getWorksuiteSsoTicket);
 
 module.exports = router;

@@ -48,6 +48,7 @@ import { AiEnergyLogo } from '../../components/common/AiEnergyLogo';
 import { LanguageToggle } from '../../components/common/LanguageToggle';
 import { useLanguage } from '../../context/LanguageContext';
 import iconLogo from '../../assets/crm_nergy_ai_icon.png';
+import { launchWorksuiteApp } from '../../services/worksuiteSso';
 
 export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
   const { theme, toggleTheme } = useTheme();
@@ -527,17 +528,10 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </button>
         )}
 
-        {/* 1-Click Seamless Worksuite CRM Switcher (No Login Needed) */}
+        {/* 1-Click Secure Worksuite CRM Switcher */}
         <button
           type="button"
-          onClick={() => {
-            const userEmail = currentUser?.email || 'kavya@gmail.com';
-            const userName = currentUser?.name || 'Administrator';
-            const userRole = currentUser?.role || 'ADMIN';
-            const token = localStorage.getItem('crm_token') || `sso_session_${Date.now()}`;
-            const ssoUrl = `http://localhost:5174/sso-login?email=${encodeURIComponent(userEmail)}&name=${encodeURIComponent(userName)}&role=${encodeURIComponent(userRole)}&token=${encodeURIComponent(token)}`;
-            window.open(ssoUrl, '_blank');
-          }}
+          onClick={() => launchWorksuiteApp()}
           className="hidden-mobile"
           style={{
             display: 'inline-flex',
@@ -850,14 +844,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </DropdownItem>
           <DropdownItem
             icon={Building2}
-            onClick={() => {
-              const userEmail = currentUser?.email || 'kavya@gmail.com';
-              const userName = currentUser?.name || 'Administrator';
-              const userRole = currentUser?.role || 'ADMIN';
-              const token = localStorage.getItem('crm_token') || `sso_session_${Date.now()}`;
-              const ssoUrl = `http://localhost:5174/sso-login?email=${encodeURIComponent(userEmail)}&name=${encodeURIComponent(userName)}&role=${encodeURIComponent(userRole)}&token=${encodeURIComponent(token)}`;
-              window.open(ssoUrl, '_blank');
-            }}
+            onClick={() => launchWorksuiteApp()}
           >
             {t('Switch to Worksuite CRM')}
           </DropdownItem>

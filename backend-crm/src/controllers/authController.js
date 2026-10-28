@@ -62,6 +62,19 @@ class AuthController {
       next(error);
     }
   }
+
+  async getWorksuiteSsoTicket(req, res, next) {
+    try {
+      const data = await authService.generateWorksuiteSsoTicket(req.user.userId);
+      return res.status(200).json({
+        success: true,
+        message: 'Secure SSO exchange ticket issued.',
+        data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new AuthController();

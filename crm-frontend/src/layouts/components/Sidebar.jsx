@@ -29,27 +29,17 @@ export const Sidebar = ({
   // Dynamic Develo CRM role-tailored navigation items
   const develoNavItems = product === 'crm' ? getDeveloNavForRole(currentUser) : [];
 
-  // Group filtered items by section, placing Develo CRM in place of Core CRM
-  const groupedSections = {};
+  // Group filtered items by section, preserving all Core CRM and enterprise modules
+  const groupedSections = permittedNavItems.reduce((acc, item) => {
+    const sec = item.section || 'General';
+    if (!acc[sec]) acc[sec] = [];
+    acc[sec].push(item);
+    return acc;
+  }, {});
 
-  if (product === 'crm') {
-    // 1. Dynamic Develo CRM suite tailored to active persona placed in place of Core CRM
-    groupedSections['Develo CRM'] = develoNavItems;
-
-    // 2. Append non-Core CRM enterprise sections (Enterprise ERP, AI SuperHouse, etc.)
-    permittedNavItems.forEach((item) => {
-      if (item.section !== 'Core CRM') {
-        const sec = item.section || 'General';
-        if (!groupedSections[sec]) groupedSections[sec] = [];
-        groupedSections[sec].push(item);
-      }
-    });
-  } else {
-    permittedNavItems.forEach((item) => {
-      const sec = item.section || 'General';
-      if (!groupedSections[sec]) groupedSections[sec] = [];
-      groupedSections[sec].push(item);
-    });
+  // Append Develo CRM as a separate, clearly labelled navigation section (without replacing Core CRM)
+  if (product === 'crm' && develoNavItems.length > 0) {
+    groupedSections['Develo CRM (Worksuite)'] = develoNavItems;
   }
 
   const handleLogout = () => {

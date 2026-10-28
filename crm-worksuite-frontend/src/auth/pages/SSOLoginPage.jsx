@@ -18,61 +18,46 @@ const SSOLoginPage = () => {
 
     const performSSO = async () => {
       try {
-        const email = searchParams.get('email') || 'a.wright@nergy.io'
-        const name = searchParams.get('name') || 'Business Owner'
-        const incomingRole = searchParams.get('role') || 'ADMIN'
-
-        // Normalize role to Worksuite roles: SUPERADMIN | ADMIN | EMPLOYEE | CLIENT
-        let targetRole = 'ADMIN'
-        const upper = incomingRole.toUpperCase()
-        if (upper === 'SUPER_ADMIN' || upper === 'SUPERADMIN') {
-          targetRole = 'SUPERADMIN'
-        } else if (upper === 'CUSTOMER' || upper === 'CLIENT') {
-          targetRole = 'CLIENT'
-        } else if (upper === 'EMPLOYEE' || upper === 'CONTENT_CREATOR' || upper === 'CRM_PRO') {
-          targetRole = 'EMPLOYEE'
-        } else {
-          targetRole = 'ADMIN'
-        }
-
+        const ticket = searchParams.get('ticket')
         const isEmbeddedMode = searchParams.get('embedded') === 'true' || (typeof window !== 'undefined' && window.self !== window.top)
         if (isEmbeddedMode) {
           sessionStorage.setItem('is_embedded', 'true')
         }
 
         const redirectParam = searchParams.get('redirect')
-        let targetUrl = redirectParam || (targetRole === 'SUPERADMIN'
-          ? '/app/superadmin/dashboard'
-          : targetRole === 'CLIENT'
-          ? '/app/client/dashboard'
-          : targetRole === 'EMPLOYEE'
-          ? '/app/employee/dashboard'
-          : '/app/admin/dashboard')
-
+        let targetUrl = redirectParam || '/app/admin/dashboard'
         if (isEmbeddedMode && !targetUrl.includes('embedded=')) {
           targetUrl += (targetUrl.includes('?') ? '&' : '?') + 'embedded=true'
         }
 
-        // If already logged in as this user, jump straight to target
-        if (user && user.email === email && localStorage.getItem('token')) {
-          setIsSuccess(true)
-          setStatus(`Welcome back, ${name}!`)
-          navigate(targetUrl, { replace: true })
+        // Sanitize URL bar immediately so tickets do not remain in history or referrers
+        try {
+          window.history.replaceState({}, document.title, window.location.pathname)
+        } catch (_) {}
+
+        // If no ticket provided, check if existing session is already valid
+        if (!ticket) {
+          if (user && localStorage.getItem('token')) {
+            setIsSuccess(true)
+            setStatus(`Welcome back, ${user.name || 'User'}!`)
+            navigate(targetUrl, { replace: true })
+            return
+          }
+          setErrorMsg('No secure SSO exchange ticket was provided. Please launch this module from CRM - Energy.')
+          setStatus('Authentication required')
           return
         }
 
-        setStatus(`Authenticating session for ${name}...`)
+        setStatus('Verifying cryptographic SSO exchange ticket...')
 
-        // Call backend SSO to get a valid signed JWT and active session
+        // Call backend SSO with the signed ticket
         const res = await ssoLogin({
-          email,
-          name,
-          role: targetRole
+          ssoTicket: ticket
         })
 
         if (res?.success) {
           setIsSuccess(true)
-          setStatus(`Welcome ${name}! Launching dashboard...`)
+          setStatus(`Authorized as ${res.user?.name || 'User'}. Launching workspace...`)
           setTimeout(() => {
             navigate(targetUrl, { replace: true })
           }, 150)

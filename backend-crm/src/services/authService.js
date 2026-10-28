@@ -188,6 +188,50 @@ class AuthService {
       createdAt: user.createdAt,
     };
   }
+
+  /**
+   * Generate a cryptographically signed, short-lived SSO ticket for Worksuite CRM handoff.
+   * Uses WORKSUITE_SSO_SECRET, unique jti for replay protection, and strict server-side role mapping.
+   */
+  async generateWorksuiteSsoTicket(userId) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || !user.isActive) {
+      const err = new Error('Authenticated user account is inactive or not found.');
+      err.statusCode = 403;
+      throw err;
+    }
+
+    const crypto = require('crypto');
+    const jwt = require('jsonwebtoken');
+
+    // Strict role mapping (never permit arbitrary role promotion or SUPERADMIN)
+    let mappedRole = 'ADMIN';
+    const roleStr = (user.role || '').toUpperCase();
+    if (roleStr === 'CUSTOMER' || roleStr === 'CLIENT') {
+      mappedRole = 'CLIENT';
+    } else if (['CONTENT_CREATOR', 'CONTENT_BUILDER', 'INFLUENCER', 'AFFILIATE_PARTNER', 'AI_MARKETING_PRO', 'HR', 'CRM_PRO'].includes(roleStr)) {
+      mappedRole = 'EMPLOYEE';
+    } else {
+      mappedRole = 'ADMIN';
+    }
+
+    const ssoSecret = process.env.WORKSUITE_SSO_SECRET || 'worksuite_sso_secure_exchange_secret_2026_change_in_prod';
+    const payload = {
+      jti: crypto.randomUUID(),
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: mappedRole,
+      iss: 'crm-nergy-backend',
+      aud: 'worksuite-crm',
+    };
+
+    const ssoTicket = jwt.sign(payload, ssoSecret, { expiresIn: '60s' });
+    return { ssoTicket, expiresIn: 60 };
+  }
 }
 
 module.exports = new AuthService();

@@ -10,8 +10,10 @@ import {
   Sparkles,
   ShieldCheck,
   Building2,
-  Layers
+  Layers,
+  ShieldAlert,
 } from 'lucide-react';
+import { getWorksuiteSsoTicket, launchWorksuiteApp } from '../../../services/worksuiteSso';
 
 const MODULE_ROUTE_MAP = {
   // Admin routes
@@ -66,6 +68,8 @@ export const DeveloWorkspace = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [ticket, setTicket] = useState(null);
+  const [ticketError, setTicketError] = useState(null);
 
   // Derive active module robustly from location pathname or params
   const currentModule = useMemo(() => {
@@ -90,16 +94,34 @@ export const DeveloWorkspace = () => {
     return '/app/admin/dashboard';
   }, [currentModule, crmUser]);
 
-  // Construct SSO authentication target URL
-  const iframeSrc = useMemo(() => {
-    const userEmail = crmUser?.email || 'business.owner@nergy.io';
-    const userName = crmUser?.name || 'Business Owner';
-    const userRole = crmUser?.role || 'BUSINESS_OWNER';
-    const token = localStorage.getItem('crm_token') || `sso_crm_${Date.now()}`;
-    const activeTheme = isDark ? 'dark' : 'light';
+  // Request a cryptographic SSO ticket from CRM - Energy backend
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchSsoTicket = async () => {
+      setIsLoading(true);
+      setTicketError(null);
+      const ssoTicket = await getWorksuiteSsoTicket();
+      if (!isCancelled) {
+        if (ssoTicket) {
+          setTicket(ssoTicket);
+        } else {
+          setTicketError('Unable to generate secure SSO ticket with CRM - Energy. Ensure you are signed in.');
+        }
+        setIsLoading(false);
+      }
+    };
+    fetchSsoTicket();
+    return () => {
+      isCancelled = true;
+    };
+  }, [iframeKey]);
 
-    return `http://localhost:5174/sso-login?email=${encodeURIComponent(userEmail)}&name=${encodeURIComponent(userName)}&role=${encodeURIComponent(userRole)}&token=${encodeURIComponent(token)}&embedded=true&theme=${activeTheme}&redirect=${encodeURIComponent(targetSubpath)}`;
-  }, [crmUser, targetSubpath, iframeKey, isDark]);
+  // Construct SSO authentication target URL with the signed ticket
+  const iframeSrc = useMemo(() => {
+    if (!ticket) return '';
+    const activeTheme = isDark ? 'dark' : 'light';
+    return `http://localhost:5174/sso-login?ticket=${encodeURIComponent(ticket)}&embedded=true&theme=${activeTheme}&redirect=${encodeURIComponent(targetSubpath)}`;
+  }, [ticket, targetSubpath, isDark]);
 
   // Format module title for header
   const titleFormatted = useMemo(() => {
@@ -149,7 +171,7 @@ export const DeveloWorkspace = () => {
   };
 
   const handleOpenExternal = () => {
-    window.open(iframeSrc.replace('&embedded=true', ''), '_blank');
+    launchWorksuiteApp(targetSubpath);
   };
 
   return (
@@ -340,19 +362,63 @@ export const DeveloWorkspace = () => {
           </div>
         )}
 
-        <iframe
-          key={`${iframeKey}-${targetSubpath}`}
-          src={iframeSrc}
-          title={`Develo CRM - ${titleFormatted}`}
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            display: 'block',
-          }}
-          onLoad={() => setIsLoading(false)}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        />
+        {ticketError && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: isDark ? '#0f172a' : '#f8fafc',
+              zIndex: 20,
+              gap: '12px',
+              padding: '24px',
+              textAlign: 'center',
+            }}
+          >
+            <ShieldAlert size={42} style={{ color: '#f43f5e' }} />
+            <h3 style={{ color: isDark ? '#f8fafc' : '#0f172a', margin: 0, fontSize: '16px', fontWeight: 700 }}>
+              Secure SSO Handshake Required
+            </h3>
+            <p style={{ color: '#94a3b8', fontSize: '13px', maxWidth: '420px', margin: 0 }}>
+              {ticketError}
+            </p>
+            <button
+              onClick={handleReload}
+              style={{
+                marginTop: '6px',
+                padding: '8px 16px',
+                backgroundColor: '#4f46e5',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '13px',
+              }}
+            >
+              Retry Secure Connection
+            </button>
+          </div>
+        )}
+
+        {iframeSrc && !ticketError && (
+          <iframe
+            key={`${iframeKey}-${targetSubpath}`}
+            src={iframeSrc}
+            title={`Develo CRM - ${titleFormatted}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+            }}
+            onLoad={() => setIsLoading(false)}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          />
+        )}
       </div>
     </div>
   );
