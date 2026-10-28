@@ -127,7 +127,6 @@ const Projects = ({ clientId = null, embedded = false, companyId: propCompanyId 
     label: '',
     projectMembers: [],
     createPublicProject: false,
-    createPublicProject: false,
     status: 'in progress',
     projectType: 'Client Project',
   })
@@ -614,7 +613,6 @@ const Projects = ({ clientId = null, embedded = false, companyId: propCompanyId 
       taskApproval: 'disable',
       label: '',
       projectMembers: [],
-      createPublicProject: false,
       createPublicProject: false,
       status: 'in progress',
       projectType: 'Client Project',

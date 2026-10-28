@@ -13,11 +13,11 @@ const Button = ({
   const baseClasses = 'font-semibold rounded-button transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 relative'
   
   const variants = {
-    primary: 'bg-primary-accent text-white hover:bg-primary-accent/90 hover:shadow-elevated focus:ring-primary-accent shadow-soft',
-    secondary: 'bg-secondary-accent text-white hover:bg-secondary-accent/90 hover:shadow-elevated focus:ring-secondary-accent shadow-soft',
-    outline: 'border-2 border-gray-300 text-gray-900 hover:bg-gray-800 hover:text-white hover:border-gray-800 hover:shadow-soft focus:ring-primary-accent bg-white',
-    ghost: 'text-text-dark hover:bg-sidebar-hover focus:ring-primary-accent',
-    danger: 'bg-danger text-white hover:bg-danger/90 hover:shadow-elevated focus:ring-danger shadow-soft',
+    primary: 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-md hover:shadow-indigo-500/25 focus:ring-indigo-500 shadow-sm active:scale-[0.98]',
+    secondary: 'bg-cyan-600 hover:bg-cyan-700 text-white hover:shadow-md hover:shadow-cyan-500/25 focus:ring-cyan-500 shadow-sm active:scale-[0.98]',
+    outline: 'border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus:ring-indigo-500 bg-white shadow-sm',
+    ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-indigo-500',
+    danger: 'bg-rose-600 hover:bg-rose-700 text-white hover:shadow-md focus:ring-rose-500 shadow-sm active:scale-[0.98]',
   }
   
   const sizes = {

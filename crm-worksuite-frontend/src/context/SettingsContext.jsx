@@ -39,8 +39,8 @@ export const SettingsProvider = ({ children }) => {
     time_format: 'H:i',
     currency_symbol_position: 'before',
     theme_mode: 'light',
-    primary_color: '#217E45',
-    secondary_color: '#76AF88',
+    primary_color: '#4f46e5',
+    secondary_color: '#06b6d4',
     font_family: 'Inter, sans-serif',
   })
 

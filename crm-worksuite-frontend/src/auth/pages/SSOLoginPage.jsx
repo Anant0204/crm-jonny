@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { FaBolt, FaShieldAlt, FaCheckCircle, FaSpinner } from 'react-icons/fa'
+import { FaBolt, FaShieldAlt, FaCheckCircle, FaSpinner, FaExclamationTriangle } from 'react-icons/fa'
 
 const SSOLoginPage = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { ssoLogin, user } = useAuth()
   const [status, setStatus] = useState('Connecting to Worksuite CRM...')
   const [isSuccess, setIsSuccess] = useState(false)
+  const [errorMsg, setErrorMsg] = useState(null)
+  const hasRunRef = useRef(false)
 
   useEffect(() => {
-    let isMounted = true
+    if (hasRunRef.current) return
+    hasRunRef.current = true
 
     const performSSO = async () => {
       try {
-        const email = searchParams.get('email') || 'kavya@gmail.com'
-        const name = searchParams.get('name') || 'Admin User'
+        const email = searchParams.get('email') || 'a.wright@nergy.io'
+        const name = searchParams.get('name') || 'Business Owner'
         const incomingRole = searchParams.get('role') || 'ADMIN'
-        const token = searchParams.get('token') || `sso_session_${Date.now()}`
 
         // Normalize role to Worksuite roles: SUPERADMIN | ADMIN | EMPLOYEE | CLIENT
         let targetRole = 'ADMIN'
@@ -33,79 +35,60 @@ const SSOLoginPage = () => {
           targetRole = 'ADMIN'
         }
 
-        if (isMounted) setStatus(`Authenticating session for ${name}...`)
-
-        // Default working credentials from crm_db
-        const defaultRoleCredentials = {
-          SUPERADMIN: { email: 'admin@democompany.com', password: 'admin123' },
-          ADMIN: { email: 'admin@democompany.com', password: 'admin123' },
-          CLIENT: { email: 'client@demo.com', password: 'admin123' },
-          EMPLOYEE: { email: 'employee@demo.com', password: 'admin123' },
+        const isEmbeddedMode = searchParams.get('embedded') === 'true' || (typeof window !== 'undefined' && window.self !== window.top)
+        if (isEmbeddedMode) {
+          sessionStorage.setItem('is_embedded', 'true')
         }
 
-        const creds = defaultRoleCredentials[targetRole] || defaultRoleCredentials.ADMIN
+        const redirectParam = searchParams.get('redirect')
+        let targetUrl = redirectParam || (targetRole === 'SUPERADMIN'
+          ? '/app/superadmin/dashboard'
+          : targetRole === 'CLIENT'
+          ? '/app/client/dashboard'
+          : targetRole === 'EMPLOYEE'
+          ? '/app/employee/dashboard'
+          : '/app/admin/dashboard')
 
-        // Step 1: Pre-populate localStorage directly for instant fallback & session validity
-        const userData = {
-          id: 1,
-          company_id: 1,
-          company_name: 'Worksuite Enterprise',
-          name: name,
-          email: email,
-          role: targetRole,
-          status: 'Active',
+        if (isEmbeddedMode && !targetUrl.includes('embedded=')) {
+          targetUrl += (targetUrl.includes('?') ? '&' : '?') + 'embedded=true'
         }
 
-        localStorage.removeItem('loginRetryAfter')
-        localStorage.setItem('authToken', token)
-        localStorage.setItem('token', token)
-        localStorage.setItem('user', JSON.stringify(userData))
-        localStorage.setItem('userId', '1')
-        localStorage.setItem('userRole', targetRole)
-        localStorage.setItem('userEmail', email)
-        localStorage.setItem('companyId', '1')
-        localStorage.setItem('companyName', userData.company_name)
-
-        // Step 2: Try authenticating against backend if available
-        try {
-          await login(creds.email, creds.password, targetRole)
-        } catch (apiErr) {
-          console.warn('Backend authentication bypassed for SSO session:', apiErr)
+        // If already logged in as this user, jump straight to target
+        if (user && user.email === email && localStorage.getItem('token')) {
+          setIsSuccess(true)
+          setStatus(`Welcome back, ${name}!`)
+          navigate(targetUrl, { replace: true })
+          return
         }
 
-        if (isMounted) {
+        setStatus(`Authenticating session for ${name}...`)
+
+        // Call backend SSO to get a valid signed JWT and active session
+        const res = await ssoLogin({
+          email,
+          name,
+          role: targetRole
+        })
+
+        if (res?.success) {
           setIsSuccess(true)
           setStatus(`Welcome ${name}! Launching dashboard...`)
+          setTimeout(() => {
+            navigate(targetUrl, { replace: true })
+          }, 150)
+        } else {
+          setErrorMsg(res?.error || 'Authentication handshake could not be completed.')
+          setStatus('Authentication error')
         }
-
-        // Small delay to let user see the seamless transition
-        setTimeout(() => {
-          if (!isMounted) return
-          if (targetRole === 'SUPERADMIN') {
-            navigate('/app/superadmin/dashboard', { replace: true })
-          } else if (targetRole === 'CLIENT') {
-            navigate('/app/client/dashboard', { replace: true })
-          } else if (targetRole === 'EMPLOYEE') {
-            navigate('/app/employee/dashboard', { replace: true })
-          } else {
-            navigate('/app/admin/dashboard', { replace: true })
-          }
-        }, 600)
       } catch (err) {
         console.error('SSO Login Error:', err)
-        if (isMounted) {
-          // Fallback direct navigate to admin dashboard
-          navigate('/app/admin/dashboard', { replace: true })
-        }
+        setErrorMsg(err.message || 'Unable to connect to Worksuite server')
+        setStatus('Connection error')
       }
     }
 
     performSSO()
-
-    return () => {
-      isMounted = false
-    }
-  }, [searchParams, navigate, login])
+  }, [searchParams, navigate, ssoLogin, user])
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
@@ -123,20 +106,34 @@ const SSOLoginPage = () => {
 
         <p className="text-sm text-slate-300 mb-6">{status}</p>
 
-        <div className="flex items-center justify-center gap-3 text-indigo-400">
-          {isSuccess ? (
-            <FaCheckCircle className="text-emerald-400 text-xl animate-bounce" />
-          ) : (
-            <FaSpinner className="animate-spin text-xl text-indigo-400" />
-          )}
-          <span className="text-xs font-medium text-slate-400">
-            {isSuccess ? 'Authorized. Loading workspace...' : 'Transferring credentials...'}
-          </span>
-        </div>
+        {errorMsg ? (
+          <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 text-xs text-rose-300 mb-4">
+            <FaExclamationTriangle className="mx-auto mb-2 text-rose-400 text-lg" />
+            <p className="font-semibold mb-1">SSO Authentication Failed</p>
+            <p className="text-rose-300/80 mb-3">{errorMsg}</p>
+            <button
+              onClick={() => navigate('/login', { replace: true })}
+              className="px-4 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-medium rounded-lg shadow transition-all"
+            >
+              Sign In Directly
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-3 text-indigo-400">
+            {isSuccess ? (
+              <FaCheckCircle className="text-emerald-400 text-xl animate-bounce" />
+            ) : (
+              <FaSpinner className="animate-spin text-xl text-indigo-400" />
+            )}
+            <span className="text-xs font-medium text-slate-400">
+              {isSuccess ? 'Authorized. Loading workspace...' : 'Transferring credentials...'}
+            </span>
+          </div>
+        )}
 
         <div className="mt-8 pt-4 border-t border-slate-700/50 flex items-center justify-center gap-2 text-xs text-slate-500">
           <FaShieldAlt className="text-slate-400" />
-          <span>Connected seamlessly with Energy CRM</span>
+          <span>Connected seamlessly with CRM nErgy AI</span>
         </div>
       </div>
     </div>

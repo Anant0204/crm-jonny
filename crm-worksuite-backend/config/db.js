@@ -6,7 +6,7 @@ const mysql = require('mysql2/promise');
 
 // Create connection pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || '127.0.0.1',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASS || '',
   database: process.env.DB_NAME || 'crm_db',
@@ -1041,9 +1041,7 @@ pool.getConnection()
   .catch(err => {
     console.error('❌ Database connection error:', err.message);
     console.error('Please ensure MySQL is running and database exists');
-    console.error('Server cannot start without database connection');
-    // Exit with error code - server should not run without database
-    process.exit(1);
+    // Do not terminate process immediately so pool can retry
   });
 
 module.exports = pool;

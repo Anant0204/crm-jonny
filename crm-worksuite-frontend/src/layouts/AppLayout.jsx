@@ -73,6 +73,30 @@ const AppLayout = () => {
     }
   }, [location.pathname, user, canView, permissionsLoading, navigate])
 
+  // Check if running embedded inside CRM nErgy AI iframe
+  const isEmbedded = typeof window !== 'undefined' && (
+    window.self !== window.top ||
+    new URLSearchParams(location.search).get('embedded') === 'true' ||
+    sessionStorage.getItem('is_embedded') === 'true'
+  )
+
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('embedded') === 'true' || (typeof window !== 'undefined' && window.self !== window.top)) {
+      sessionStorage.setItem('is_embedded', 'true')
+    }
+  }, [location.search])
+
+  // In embedded mode, only render content outlet (zero double sidebars, seamless integration)
+  if (isEmbedded) {
+    return (
+      <div className="min-h-screen w-full overflow-x-hidden bg-main-bg">
+        <main className={`w-full max-w-full overflow-x-hidden relative z-10 ${isDetailPage ? 'p-0' : 'p-3 sm:p-5'}`}>
+          <Outlet />
+        </main>
+      </div>
+    )
+  }
+
   // Removed auto-close logic to keep sidebar persistent
 
   return (

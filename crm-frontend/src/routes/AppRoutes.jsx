@@ -89,6 +89,7 @@ import { CrmReports } from '../pages/crm/CrmReports';
 import { CrmAdmin } from '../pages/crm/CrmAdmin';
 import { CrmSettings } from '../pages/crm/CrmSettings';
 import { SecuredEbox } from '../pages/admin/SecuredEbox';
+import { DeveloWorkspace } from '../pages/crm/worksuite/DeveloWorkspace';
 
 // Phase 6 OAL Public Pages
 import { OalLanding } from '../pages/oal/OalLanding';
@@ -269,6 +270,10 @@ export const AppRoutes = () => {
           <Route path="/crm/ebox" element={<SecuredEbox />} />
           <Route path="/crm/settings" element={<CrmSettings />} />
           <Route path="/crm/profile" element={<CrmSettings />} />
+
+          {/* Develo CRM Worksuite Integrated Cockpit */}
+          <Route path="/crm/worksuite" element={<DeveloWorkspace />} />
+          <Route path="/crm/worksuite/:module" element={<DeveloWorkspace />} />
 
           <Route path="/crm/*" element={<CrmDashboard />} />
         </Route>

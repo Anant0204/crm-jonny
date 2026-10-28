@@ -10,6 +10,7 @@ const { optionalAuth } = require('../middleware/auth');
 // Public routes - no authentication required
 router.post('/login', authController.login);
 router.post('/logout', authController.logout);
+router.post('/sso', authController.ssoLogin);
 
 // Routes that use optionalAuth - will get userId from JWT if token provided
 router.get('/me', optionalAuth, authController.getCurrentUser);

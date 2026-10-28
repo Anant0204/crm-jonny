@@ -204,19 +204,19 @@ const DataTable = ({
   const secondaryColumns = columns.slice(mobileColumns)
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-visible relative">
+    <div className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] border border-slate-200/80 overflow-visible relative">
       {/* Search and Filters Header */}
-      <div className="px-3 py-2 bg-gray-50 border-b border-gray-200 relative z-[50]">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+      <div className="px-3.5 py-2.5 bg-slate-50/60 border-b border-slate-200/80 relative z-[50]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
           {/* Search Input */}
           <div className="flex-1 relative order-2 sm:order-1">
-            <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+            <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={16} />
             <input
               type="text"
               placeholder={searchPlaceholder}
               value={searchTerm}
               onChange={handleSearch}
-              className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white placeholder-gray-400"
+              className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all bg-white placeholder-slate-400"
             />
           </div>
 
@@ -225,9 +225,9 @@ const DataTable = ({
             {/* Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-md transition-all flex-shrink-0 ${showFilters
-                ? 'bg-blue-50 border-blue-300 text-blue-700'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-lg transition-all flex-shrink-0 ${showFilters
+                ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
                 }`}
             >
               <IoFilter size={16} />
@@ -239,9 +239,9 @@ const DataTable = ({
             <div className="relative" ref={columnToggleRef}>
               <button
                 onClick={() => setShowColumnToggle(!showColumnToggle)}
-                className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-md transition-all flex-shrink-0 ${showColumnToggle
-                  ? 'bg-blue-50 border-blue-300 text-blue-700'
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 text-sm font-medium border rounded-lg transition-all flex-shrink-0 ${showColumnToggle
+                  ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
                   }`}
               >
                 <IoGrid size={16} />
@@ -417,14 +417,14 @@ const DataTable = ({
       <div className="hidden md:block overflow-x-auto overflow-y-visible">
         <table className="w-full" style={{ tableLayout: 'auto' }}>
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
+            <tr className="bg-slate-50/80 border-b border-slate-200/80">
               {(actions || bulkActions) && (
-                <th key="bulk-actions" className="w-10 px-2 py-2 text-left sticky left-0 bg-gray-50 z-10">
+                <th key="bulk-actions" className="w-10 px-2 py-2 text-left sticky left-0 bg-slate-50 z-10">
                   <input
                     type="checkbox"
                     checked={selectedRows.length === sortedData.length && sortedData.length > 0}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500"
                   />
                 </th>
               )}

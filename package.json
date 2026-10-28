@@ -1,0 +1,18 @@
+{
+  "name": "crm-all-suite",
+  "version": "1.0.0",
+  "description": "Unified runner for CRM nErgy AI and Worksuite CRM",
+  "scripts": {
+    "dev": "concurrently -n \"CRM-FRONT,CRM-BACK,WORK-FRONT,WORK-BACK\" -c \"cyan,blue,magenta,yellow\" \"npm run dev --prefix crm-frontend\" \"npm run dev --prefix backend-crm\" \"npm run dev --prefix crm-worksuite-frontend\" \"npm run dev --prefix crm-worksuite-backend\"",
+    "dev:crm": "concurrently -n \"CRM-FRONT,CRM-BACK\" -c \"cyan,blue\" \"npm run dev --prefix crm-frontend\" \"npm run dev --prefix backend-crm\"",
+    "dev:worksuite": "concurrently -n \"WORK-FRONT,WORK-BACK\" -c \"magenta,yellow\" \"npm run dev --prefix crm-worksuite-frontend\" \"npm run dev --prefix crm-worksuite-backend\"",
+    "dev:crm-frontend": "npm run dev --prefix crm-frontend",
+    "dev:crm-backend": "npm run dev --prefix backend-crm",
+    "dev:worksuite-frontend": "npm run dev --prefix crm-worksuite-frontend",
+    "dev:worksuite-backend": "npm run dev --prefix crm-worksuite-backend",
+    "install:all": "npm install && npm install --prefix crm-frontend && npm install --prefix backend-crm && npm install --prefix crm-worksuite-frontend && npm install --prefix crm-worksuite-backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

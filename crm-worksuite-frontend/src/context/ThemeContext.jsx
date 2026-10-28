@@ -12,26 +12,26 @@ export const useTheme = () => {
 }
 
 const defaultTheme = {
-  // Colors
-  primaryDark: '#102D2C',
-  primaryAccent: '#217E45',
-  secondaryAccent: '#76AF88',
-  mainBg: '#F0F1F1',
-  primaryText: '#102D2C',
-  secondaryText: '#767A78',
-  mutedText: '#9A9A9C',
-  warning: '#BCB474',
-  danger: '#CC9CA4',
+  // Colors aligned with CRM nErgy AI design system
+  primaryDark: '#0f172a',
+  primaryAccent: '#4f46e5',
+  secondaryAccent: '#06b6d4',
+  mainBg: '#f8fafc',
+  primaryText: '#0f172a',
+  secondaryText: '#475569',
+  mutedText: '#94a3b8',
+  warning: '#f59e0b',
+  danger: '#ef4444',
 
   // Fonts
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+  fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   fontSize: {
-    base: '16px',
-    sm: '14px',
-    lg: '18px',
-    xl: '20px',
-    '2xl': '24px',
-    '3xl': '30px',
+    base: '15px',
+    sm: '13px',
+    lg: '17px',
+    xl: '19px',
+    '2xl': '23px',
+    '3xl': '28px',
   },
 
   // Theme mode
@@ -40,17 +40,32 @@ const defaultTheme = {
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Load theme from localStorage or use default
-    const savedTheme = localStorage.getItem('appTheme')
+    // 1. Check URL query parameters (e.g. from parent cockpit: &theme=light or &theme=dark)
+    const urlTheme = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('theme')
+      : null;
+
+    // 2. Load theme from localStorage or use default
+    const savedTheme = typeof window !== 'undefined' ? localStorage.getItem('appTheme') : null;
     if (savedTheme) {
       try {
-        return { ...defaultTheme, ...JSON.parse(savedTheme) }
+        const parsed = JSON.parse(savedTheme);
+        // Force cleanup of obsolete green theme (#102D2C / #217E45)
+        if (parsed.primaryAccent === '#217E45' || parsed.primaryDark === '#102D2C') {
+          localStorage.removeItem('appTheme');
+        } else {
+          return {
+            ...defaultTheme,
+            ...parsed,
+            mode: urlTheme || parsed.mode || 'light'
+          };
+        }
       } catch (e) {
-        return defaultTheme
+        console.error(e);
       }
     }
-    return defaultTheme
-  })
+    return { ...defaultTheme, mode: urlTheme || defaultTheme.mode };
+  });
 
   const [isLoadingSettings, setIsLoadingSettings] = useState(true)
 
@@ -123,25 +138,25 @@ export const ThemeProvider = ({ children }) => {
     } else {
       root.classList.remove('dark')
       // Light mode colors
-      root.style.setProperty('--color-main-bg', theme.mainBg || '#F0F1F1')
-      root.style.setProperty('--color-primary-text', theme.primaryText || '#102D2C')
-      root.style.setProperty('--color-secondary-text', theme.secondaryText || '#767A78')
-      root.style.setProperty('--color-muted-text', theme.mutedText || '#9A9A9C')
+      root.style.setProperty('--color-main-bg', theme.mainBg || '#f8fafc')
+      root.style.setProperty('--color-primary-text', theme.primaryText || '#0f172a')
+      root.style.setProperty('--color-secondary-text', theme.secondaryText || '#475569')
+      root.style.setProperty('--color-muted-text', theme.mutedText || '#94a3b8')
       root.style.setProperty('--color-card-bg', '#ffffff')
-      root.style.setProperty('--color-sidebar-bg', '#102D2C')
+      root.style.setProperty('--color-sidebar-bg', '#0f172a')
       root.style.setProperty('--color-input-bg', '#ffffff')
-      root.style.setProperty('--color-border', '#e5e7eb')
-      root.style.setProperty('--color-hover-bg', '#f3f4f6')
-      body.style.backgroundColor = theme.mainBg || '#F0F1F1'
-      body.style.color = theme.primaryText || '#102D2C'
+      root.style.setProperty('--color-border', '#e2e8f0')
+      root.style.setProperty('--color-hover-bg', '#f1f5f9')
+      body.style.backgroundColor = theme.mainBg || '#f8fafc'
+      body.style.color = theme.primaryText || '#0f172a'
     }
 
     // Set CSS variables (always apply, dark mode will override some)
-    root.style.setProperty('--color-primary-dark', theme.primaryDark)
-    root.style.setProperty('--color-primary-accent', theme.primaryAccent)
-    root.style.setProperty('--color-secondary-accent', theme.secondaryAccent)
-    root.style.setProperty('--color-warning', theme.warning)
-    root.style.setProperty('--color-danger', theme.danger)
+    root.style.setProperty('--color-primary-dark', theme.primaryDark || '#0f172a')
+    root.style.setProperty('--color-primary-accent', theme.primaryAccent || '#4f46e5')
+    root.style.setProperty('--color-secondary-accent', theme.secondaryAccent || '#06b6d4')
+    root.style.setProperty('--color-warning', theme.warning || '#f59e0b')
+    root.style.setProperty('--color-danger', theme.danger || '#ef4444')
 
     // Apply font family - use the value directly as it comes from settings
     // Values are like 'Poppins, sans-serif' or 'Inter, sans-serif'

@@ -177,6 +177,42 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const ssoLogin = async (ssoData) => {
+    try {
+      const response = await authAPI.ssoLogin(ssoData)
+      if (response.data.success) {
+        const token = response.data.token || response.data.data?.token
+        const userData = response.data.user || response.data.data?.user
+
+        if (!token || !userData) {
+          return { success: false, error: 'Invalid response from server' }
+        }
+
+        localStorage.removeItem('loginRetryAfter')
+        localStorage.setItem('authToken', token)
+        localStorage.setItem('token', token)
+        localStorage.setItem('user', JSON.stringify(userData))
+        localStorage.setItem('userId', userData.id)
+        localStorage.setItem('userRole', userData.role)
+        localStorage.setItem('userEmail', userData.email)
+        if (userData.company_id) {
+          localStorage.setItem('companyId', userData.company_id)
+        }
+        if (userData.company_name) {
+          localStorage.setItem('companyName', userData.company_name)
+        }
+
+        setUser(userData)
+        return { success: true, user: userData, token }
+      } else {
+        return { success: false, error: response.data.error || 'SSO failed' }
+      }
+    } catch (error) {
+      console.error('AuthContext ssoLogin error:', error)
+      return { success: false, error: error.response?.data?.error || error.message }
+    }
+  }
+
   const signup = async (email, password, name, role = 'CLIENT') => {
     // Signup would typically be handled by admin creating users
     // This is kept for backward compatibility
@@ -203,7 +239,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, ssoLogin, signup, logout, loading }}>
       {children}
     </AuthContext.Provider>
   )

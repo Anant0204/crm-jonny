@@ -2,12 +2,12 @@ import React from 'react'
 
 const Badge = ({ children, variant = 'default', className = '' }) => {
   const variants = {
-    default: 'bg-gray-100 text-gray-800',
-    success: 'bg-primary-accent bg-opacity-10 text-black', // Changed text color to black for better visibility
-    warning: 'bg-warning bg-opacity-10 text-black',
-    danger: 'bg-danger bg-opacity-10 text-black',
-    info: 'bg-secondary-accent bg-opacity-10 text-black',
-    none: '', // No default colors, use className for everything
+    default: 'bg-slate-100 text-slate-700 border border-slate-200/60',
+    success: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
+    warning: 'bg-amber-50 text-amber-700 border border-amber-200/60',
+    danger: 'bg-rose-50 text-rose-700 border border-rose-200/60',
+    info: 'bg-indigo-50 text-indigo-700 border border-indigo-200/60',
+    none: '',
   }
 
   // Handle undefined/null/empty children gracefully

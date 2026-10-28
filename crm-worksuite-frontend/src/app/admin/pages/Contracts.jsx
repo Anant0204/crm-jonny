@@ -597,7 +597,6 @@ const Contracts = ({ leadId = null, clientId = null, embedded = false, companyId
           tax: data.tax || "",
           second_tax: data.second_tax || "",
           note: data.note || data.description || "",
-          amount: data.amount || data.total || 0,
           status: data.status || "Draft",
           items: items,
           amount: totals.total || data.amount || 0,

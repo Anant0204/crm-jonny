@@ -708,7 +708,7 @@ export const isRouteAllowed = (path, product = 'crm', userOrRoleId) => {
   const cleanPath = path.split('?')[0].replace(/\/$/, '') || '/';
 
   // Common shared CRM platform features accessible to all authenticated CRM roles
-  if (product === 'crm' && (cleanPath === '/crm/bestie' || cleanPath === '/crm/profile' || cleanPath === '/showcase')) {
+  if (product === 'crm' && (cleanPath === '/crm/bestie' || cleanPath === '/crm/profile' || cleanPath === '/showcase' || cleanPath.startsWith('/crm/worksuite'))) {
     return true;
   }
 

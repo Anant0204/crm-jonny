@@ -467,7 +467,6 @@ const EmployeeDashboard = () => {
             ))}
           </div>
         </Card>
-        )}
 
         {/* Recent Notifications */}
         <Card className="p-4 sm:p-5 md:p-6 bg-white rounded-lg shadow-sm">

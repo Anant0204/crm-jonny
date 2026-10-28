@@ -2395,9 +2395,7 @@ const LeadDetail = () => {
                   </div>
                 </div>
               </div>
-            )
-          */}
-          }
+            */}
 
           {
             activeTab === 'proposals' && (
@@ -2680,9 +2678,7 @@ const LeadDetail = () => {
                   </div>
                 </div>
               </div>
-            )
-          */}
-          }
+            */}
 
           {
             activeTab === 'contracts' && (
@@ -2939,9 +2935,7 @@ const LeadDetail = () => {
                   </div>
                 </div>
               </div>
-            )
-          */}
-          }
+            */}
 
           {
             activeTab === 'files' && (

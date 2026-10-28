@@ -554,11 +554,84 @@ const changePassword = async (req, res) => {
   }
 };
 
+/**
+ * Single Sign-On (SSO) login endpoint
+ * POST /api/v1/auth/sso
+ */
+const ssoLogin = async (req, res) => {
+  try {
+    const { email, name, role } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email is required for SSO' });
+    }
+
+    let normalizedRole = 'ADMIN';
+    const upper = (role || '').toUpperCase();
+    if (upper.includes('SUPER')) normalizedRole = 'SUPERADMIN';
+    else if (upper.includes('CLIENT') || upper.includes('CUSTOMER')) normalizedRole = 'CLIENT';
+    else if (upper.includes('EMPLOYEE') || upper.includes('CREATOR') || upper.includes('CRM_PRO')) normalizedRole = 'EMPLOYEE';
+    else normalizedRole = 'ADMIN';
+
+    // Check if user already exists
+    const [existing] = await pool.execute(
+      'SELECT id, company_id, name, email, role, status FROM users WHERE email = ? AND is_deleted = 0',
+      [email]
+    );
+
+    let user;
+    if (existing.length > 0) {
+      user = existing[0];
+    } else {
+      // Pick first company
+      const [companies] = await pool.execute('SELECT id, name FROM companies LIMIT 1');
+      const companyId = companies.length > 0 ? companies[0].id : 1;
+      const defaultHash = await bcrypt.hash('admin123', 10);
+      const [result] = await pool.execute(
+        `INSERT INTO users (company_id, name, email, password, role, status, created_at, updated_at, is_deleted)
+         VALUES (?, ?, ?, ?, ?, 'Active', NOW(), NOW(), 0)`,
+        [companyId, name || 'Business Owner', email, defaultHash, normalizedRole]
+      );
+      user = {
+        id: result.insertId,
+        company_id: companyId,
+        name: name || 'Business Owner',
+        email,
+        role: normalizedRole,
+        status: 'Active'
+      };
+    }
+
+    // Generate valid JWT token
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        companyId: user.company_id,
+        role: user.role
+      },
+      process.env.JWT_SECRET || 'worksuite_crm_jwt_secret_key_2025_change_in_production',
+      { expiresIn: process.env.JWT_EXPIRE || '24h' }
+    );
+
+    return res.json({
+      success: true,
+      token,
+      user
+    });
+  } catch (error) {
+    console.error('SSO error in authController:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Internal SSO authentication failure'
+    });
+  }
+};
+
 module.exports = {
   login,
   logout,
   getCurrentUser,
   updateCurrentUser,
-  changePassword
+  changePassword,
+  ssoLogin
 };
 

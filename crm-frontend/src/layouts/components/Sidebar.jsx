@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { getFilteredNavigation, getRoleConfig } from '../../utils/rbac';
+import { getDeveloNavForRole } from '../../data/develoNavigation';
 
 export const Sidebar = ({
   isCollapsed = false,
@@ -25,13 +26,31 @@ export const Sidebar = ({
   // Filter items permitted for the active role
   const permittedNavItems = getFilteredNavigation(rawNavItems, product, currentUser);
 
-  // Group filtered items by section
-  const groupedSections = permittedNavItems.reduce((acc, item) => {
-    const sec = item.section || 'General';
-    if (!acc[sec]) acc[sec] = [];
-    acc[sec].push(item);
-    return acc;
-  }, {});
+  // Dynamic Develo CRM role-tailored navigation items
+  const develoNavItems = product === 'crm' ? getDeveloNavForRole(currentUser) : [];
+
+  // Group filtered items by section, placing Develo CRM in place of Core CRM
+  const groupedSections = {};
+
+  if (product === 'crm') {
+    // 1. Dynamic Develo CRM suite tailored to active persona placed in place of Core CRM
+    groupedSections['Develo CRM'] = develoNavItems;
+
+    // 2. Append non-Core CRM enterprise sections (Enterprise ERP, AI SuperHouse, etc.)
+    permittedNavItems.forEach((item) => {
+      if (item.section !== 'Core CRM') {
+        const sec = item.section || 'General';
+        if (!groupedSections[sec]) groupedSections[sec] = [];
+        groupedSections[sec].push(item);
+      }
+    });
+  } else {
+    permittedNavItems.forEach((item) => {
+      const sec = item.section || 'General';
+      if (!groupedSections[sec]) groupedSections[sec] = [];
+      groupedSections[sec].push(item);
+    });
+  }
 
   const handleLogout = () => {
     logout(product);
