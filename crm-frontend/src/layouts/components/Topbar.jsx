@@ -528,58 +528,7 @@ export const Topbar = ({ onToggleSidebar, product = 'crm' }) => {
           </button>
         )}
 
-        {/* 1-Click Secure Worksuite CRM Switcher */}
-        <button
-          type="button"
-          onClick={() => launchWorksuiteApp()}
-          className="hidden-mobile"
-          style={{
-            display: 'inline-flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '7px',
-            height: '36px',
-            padding: '0 12px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%)',
-            border: 'none',
-            color: '#ffffff',
-            fontSize: '12px',
-            fontWeight: 700,
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-            boxShadow: '0 2px 8px -1px rgba(37, 99, 235, 0.45), 0 1px 3px rgba(79, 70, 229, 0.3)',
-            transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.boxShadow = '0 4px 16px 0 rgba(37, 99, 235, 0.6), 0 2px 8px rgba(79, 70, 229, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 2px 8px -1px rgba(37, 99, 235, 0.45), 0 1px 3px rgba(79, 70, 229, 0.3)';
-          }}
-          title="Open Worksuite CRM without logging in"
-        >
-          <Building2 size={14} style={{ color: '#bae6fd', flexShrink: 0 }} />
-          <span style={{ letterSpacing: '-0.01em', lineHeight: 1 }}>Worksuite CRM</span>
-          <span
-            style={{
-              fontSize: '9px',
-              fontWeight: 800,
-              background: 'rgba(255, 255, 255, 0.22)',
-              color: '#ffffff',
-              padding: '2px 5px',
-              borderRadius: '5px',
-              backdropFilter: 'blur(4px)',
-              letterSpacing: '0.04em',
-              lineHeight: 1,
-            }}
-          >
-            ↗
-          </span>
-        </button>
+
 
         {/* Mobile Search Button (< 768px) */}
         <button
